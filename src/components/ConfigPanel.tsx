@@ -1,28 +1,38 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useGameStore } from '../store'
 import { MOCK_SOUL_MD } from '../mockData'
 
-interface ConfigPanelProps {
-  onClose: () => void
-}
-
-export function ConfigPanel({ onClose }: ConfigPanelProps) {
+export function ConfigPanel() {
+  const activePanel = useGameStore((s) => s.activePanel)
+  const panelOpen = useGameStore((s) => s.panelOpen)
+  const closePanel = useGameStore((s) => s.closePanel)
   const [content, setContent] = useState(MOCK_SOUL_MD)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code === 'Escape' || e.code === 'KeyE') closePanel()
+    }
+    if (panelOpen) window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [panelOpen, closePanel])
+
+  if (!panelOpen || !activePanel) return null
 
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+      onClick={(e) => { if (e.target === e.currentTarget) closePanel() }}
     >
       <div className="bg-gray-900/95 border border-purple-500/40 rounded-2xl shadow-2xl shadow-purple-500/20 w-[620px] max-h-[80vh] flex flex-col">
         <div className="flex items-center justify-between px-6 py-4 border-b border-purple-500/30">
           <div className="flex items-center gap-3">
             <div className="w-3 h-3 rounded-full bg-purple-500 animate-pulse" />
-            <h2 className="text-purple-300 font-bold text-lg">Soul Chamber</h2>
+            <h2 className="text-purple-300 font-bold text-lg">{activePanel}</h2>
           </div>
-          <button onClick={onClose} className="text-gray-500 hover:text-white transition text-xl leading-none">✕</button>
+          <button onClick={closePanel} className="text-gray-500 hover:text-white transition text-xl leading-none">✕</button>
         </div>
         <div className="p-6 flex-1 overflow-auto">
-          <label className="text-gray-400 text-sm mb-2 block">SOUL.md — Agent Identity Config</label>
+          <label className="text-gray-400 text-sm mb-2 block">{activePanel} — Configuration</label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
