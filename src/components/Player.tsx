@@ -107,7 +107,7 @@ function LobsterModel() {
       {[-1, 1].map((side) => (
         <mesh key={`ant-${side}`} castShadow
           position={[side * 0.12, 0.15, -0.65]}
-          rotation={[−0.6, side * 0.3, 0]}
+          rotation={[-0.6, side * 0.3, 0]}
         >
           <cylinderGeometry args={[0.015, 0.008, 0.6, 6]} />
           <meshStandardMaterial {...mAntenna} />
