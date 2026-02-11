@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Agent {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  soul        String   // SOUL.md content
+  tools       String   @default("[]") // JSON array of tool names
+  channels    String   @default("[]") // JSON array of channel names
+  memory      String   @default("{}") // JSON object for memory data
+  status      String   @default("inactive") // active, inactive, error
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("agents")
+}
+
+model WorkspaceFile {
+  id           String   @id @default(cuid())
+  filename     String   @unique
+  content      String
+  lastModified DateTime @updatedAt
+  size         Int
+  createdAt    DateTime @default(now())
+
+  @@map("workspace_files")
+}
+
+model GatewayStatus {
+  id        String   @id @default(cuid())
+  status    String   // online, offline, error
+  version   String?
+  uptime    Int?     // uptime in seconds
+  endpoints String   @default("[]") // JSON array of available endpoints
+  lastCheck DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@map("gateway_status")
+}

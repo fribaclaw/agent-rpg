@@ -1,6 +1,7 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "es5",
     "lib": ["dom", "dom.iterable", "es6"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -14,21 +15,29 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "baseUrl": ".",
     "paths": {
-      "@agent-rpg/types": ["./packages/types/src"],
-      "@agent-rpg/ui": ["./packages/ui/src"],
-      "@agent-rpg/config": ["./packages/config/src"]
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@agent-rpg/types": ["../../packages/types/src"],
+      "@agent-rpg/ui": ["../../packages/ui/src"],
+      "@agent-rpg/config": ["../../packages/config/src"]
     }
   },
   "include": [
+    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "dist",
-    "build"
+    "node_modules"
   ]
 }
